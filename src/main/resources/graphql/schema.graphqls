@@ -1,0 +1,118 @@
+type Movie {
+    id: ID!
+    title: String
+    synopsis: String
+    releaseYear: Int
+    duration: Int
+    imgUrl: String
+    videoUrl: String
+    rating: String
+    genre: String
+    isFeatured: Boolean
+    movieTimes: [MovieTime]
+    createdDate: String
+    updatedDate: String
+}
+
+type MovieTime {
+    id: ID!
+    startTime: String
+    adultPrice: Float
+    seniorPrice: Float
+    childPrice: Float
+    isFull: Boolean
+    reservedSeats: [Seat]
+    movie: Movie
+    screen: Screen
+    createdDate: String
+    updatedDate: String
+}
+
+type Screen {
+    id: ID!
+    screenName: String
+    capacity: Int
+    movieTimes: [MovieTime]
+    createdDate: String
+    updatedDate: String
+}
+
+type Seat {
+    id: ID!
+    seatName: String
+    isTaken: Boolean
+    movieTime: MovieTime
+}
+
+type Booking {
+    id: ID!
+    movieTime: MovieTime
+    emailAddress: String
+    pickedSeats: [Seat]
+    totalPrice: Float
+    userId: ID
+    createdDate: String
+}
+
+type User {
+    id: ID!
+    firstName: String
+    lastName: String
+    address: String
+    phone: String
+    dateOfBirth: String
+    email: String
+    createdAt: String
+    updatedAt: String
+    role: String
+}
+
+type Query{
+    getMovieById(id: ID):Movie
+    getAllMovies: [Movie]
+    searchMovies(searchTerm: String!, jwt: String!):[Movie]
+
+    getScreenById(id: ID): Screen
+    getAllScreens: [Screen]
+    searchScreens(searchTerm: String!, jwt: String!): [Screen]
+
+    getMovieTimeById(id: ID): MovieTime
+    getAllMovieTimes: [MovieTime]
+
+    getSeatById(id:ID): Seat
+    getAllSeats: [Seat]
+
+    getBookingById(id: ID):Booking
+    getAllBookings: [Booking]
+    searchBookings(searchTerm: String!, jwt:String!):[Booking]
+
+    getAllUsers(jwt:String!): [User]
+    getUserById(id: ID): User
+    searchUsers(searchTerm: String!, jwt:String!):[User]
+
+}
+
+type Mutation {
+    createMovie(title: String, synopsis: String, releaseYear: Int, duration: Int, imgUrl: String, videoUrl: String, rating: String, genre: String, isFeatured: Boolean, jwt: String): Movie!
+    updateMovie(id: ID!, title: String, synopsis: String, releaseYear: Int, duration: Int, imgUrl: String, videoUrl: String, rating: String, genre: String, isFeatured: Boolean, jwt: String): Movie
+    deleteMovie(id: ID!, jwt: String!): Boolean
+
+    createScreen(screenName: String, capacity: Int, jwt: String): Screen!
+    updateScreen(id: ID!, screenName: String, capacity: Int, jwt: String): Screen
+    deleteScreen(id: ID!, jwt: String!): Boolean
+
+    createMovieTime(startTime: String, adultPrice: Float, seniorPrice: Float, childPrice: Float, isFull: Boolean, movieId: ID, screenId: ID, jwt: String): MovieTime!
+    updateMovieTime(id: ID!, startTime: String, adultPrice: Float, seniorPrice: Float, childPrice: Float, isFull: Boolean, jwt: String): MovieTime
+    deleteMovieTime(id: ID!, jwt: String): Boolean
+
+    createSeats(seatNames: [String], movieTimeId: ID): [Seat]!
+    updateSeat(id:ID!, seatName: String, isTaken: Boolean, movieTimeId: ID): Seat
+    deleteSeat(id: ID!):Boolean
+
+    createBooking(movieTimeId: ID!, emailAddress: String!, pickedSeats: [String!]!, totalPrice: Float! userId:ID): Booking!
+    updateBooking(id: ID!, emailAddress: String, pickedSeats: [ID], totalPrice: Float): Booking
+    deleteBooking(id: ID!, jwt: String!): Boolean
+
+    deleteUser(id: ID!, jwt: String!): Boolean
+
+}
